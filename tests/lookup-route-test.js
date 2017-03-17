@@ -20,6 +20,7 @@ var expecting = [{
    "phones": [
     "(202) 456-1111"
   ],
+  "phone": "(202) 456-1111",
    "divisionId": "ocd-division/country:us"
   },
   {
@@ -30,6 +31,7 @@ var expecting = [{
    "phones": [
     "(202) 456-1111"
   ],
+  "phone": "(202) 456-1111",
    "divisionId": "ocd-division/country:us"
   },
   {
@@ -40,6 +42,7 @@ var expecting = [{
    "phones": [
     "(202) 224-6542"
   ],
+  "phone": "(202) 224-6542",
    "divisionId": "ocd-division/country:us/state:ny"
   },
   {
@@ -50,6 +53,7 @@ var expecting = [{
    "phones": [
     "(202) 224-4451"
   ],
+    "phone": "(202) 224-4451",
    "divisionId": "ocd-division/country:us/state:ny"
 }];
 var googleStub;
