@@ -8,6 +8,7 @@ function mergeResults(data) {
     _officials.forEach((o, i) => {
       o.divisionId = val.divisionId;
       o.office = val.name;
+      o.phone = o.phones[0];
     });
     return transformedOfficials.concat(_officials);
   }, []);
