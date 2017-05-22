@@ -7,7 +7,7 @@ router.post('/', (req, res) => {
   var to = queryParams.t;
   
   if (to) {
-    var xml = new twilioLib.TwimlResponse();
+    var xml = new twilioLib.twiml.VoiceResponse();
     xml.dial(to);
     res.writeHead(200, {
       'Content-Type': 'text/xml'
