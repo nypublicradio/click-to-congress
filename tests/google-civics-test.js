@@ -20,11 +20,11 @@ describe('Google Civics API Client', function() {
         qs: {
           key: process.env.GOOGLE_API_KEY,
           address: ADDRESS,
-          fields: 'offices(name,officialIndices,divisionId),officials(name,party,phones)'
+          fields: 'offices(name,officialIndices,divisionId),officials(name,party,phones),divisions,normalizedInput'
         },
         json: true,
         timeout: 5000
-      })).to.be.ok;
+      })).to.be.ok; // jshint ignore:line
       
       getSpy.restore();
       done();

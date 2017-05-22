@@ -1,4 +1,54 @@
 module.exports = {
+ "normalizedInput": {
+  "line1": "123 Main Street",
+  "city": "Flushing",
+  "state": "NY",
+  "zip": "11354"
+ },
+ "divisions": {
+  "ocd-division/country:us": {
+   "name": "United States",
+   "officeIndices": [
+    0,
+    1
+   ]
+  },
+  "ocd-division/country:us/state:ny": {
+   "name": "New York",
+   "officeIndices": [
+    2,
+    4,
+    5,
+    11,
+    12
+   ]
+  },
+  "ocd-division/country:us/state:ny/cd:6": {
+   "name": "New York's 6th congressional district",
+   "officeIndices": [
+    3
+   ]
+  },
+  "ocd-division/country:us/state:ny/county:queens": {
+   "name": "Queens County",
+   "alsoKnownAs": [
+    "ocd-division/country:us/state:ny/borough:queens",
+    "ocd-division/country:us/state:ny/place:new_york/county:queens"
+   ],
+   "officeIndices": [
+    9,
+    10
+   ]
+  },
+  "ocd-division/country:us/state:ny/place:new_york": {
+   "name": "New York city",
+   "officeIndices": [
+    6,
+    7,
+    8
+   ]
+  }
+ },
  "offices": [
   {
    "name": "President of the United States",
@@ -23,8 +73,8 @@ module.exports = {
    ]
   },
   {
-   "name": "United States House of Representatives NY-07",
-   "divisionId": "ocd-division/country:us/state:ny/cd:7",
+   "name": "United States House of Representatives NY-06",
+   "divisionId": "ocd-division/country:us/state:ny/cd:6",
    "officialIndices": [
     4
    ]
@@ -44,36 +94,36 @@ module.exports = {
    ]
   },
   {
-   "name": "NY State Senate District 25",
-   "divisionId": "ocd-division/country:us/state:ny/sldu:25",
-   "officialIndices": [
-    7
-   ]
-  },
-  {
-   "name": "NY State Assembly District 52",
-   "divisionId": "ocd-division/country:us/state:ny/sldl:52",
-   "officialIndices": [
-    8
-   ]
-  },
-  {
    "name": "Mayor",
    "divisionId": "ocd-division/country:us/state:ny/place:new_york",
    "officialIndices": [
-    9
+    7
    ]
   },
   {
    "name": "Comptroller",
    "divisionId": "ocd-division/country:us/state:ny/place:new_york",
    "officialIndices": [
-    10
+    8
    ]
   },
   {
    "name": "Public Advocate",
    "divisionId": "ocd-division/country:us/state:ny/place:new_york",
+   "officialIndices": [
+    9
+   ]
+  },
+  {
+   "name": "District Attorney - Queens",
+   "divisionId": "ocd-division/country:us/state:ny/county:queens",
+   "officialIndices": [
+    10
+   ]
+  },
+  {
+   "name": "Queens Borough President",
+   "divisionId": "ocd-division/country:us/state:ny/county:queens",
    "officialIndices": [
     11
    ]
@@ -90,20 +140,6 @@ module.exports = {
    "divisionId": "ocd-division/country:us/state:ny",
    "officialIndices": [
     13
-   ]
-  },
-  {
-   "name": "County District Attorney",
-   "divisionId": "ocd-division/country:us/state:ny/county:kings",
-   "officialIndices": [
-    14
-   ]
-  },
-  {
-   "name": "Brooklyn Borough President",
-   "divisionId": "ocd-division/country:us/state:ny/county:kings",
-   "officialIndices": [
-    15
    ]
   }
  ],
@@ -137,10 +173,10 @@ module.exports = {
    ]
   },
   {
-   "name": "Nydia M. Velazquez",
+   "name": "Grace Meng",
    "party": "Democratic",
    "phones": [
-    "(202) 225-2361"
+    "(202) 225-2601"
    ]
   },
   {
@@ -155,20 +191,6 @@ module.exports = {
    "party": "Democratic",
    "phones": [
     "(518) 474-8390"
-   ]
-  },
-  {
-   "name": "Velmanette Montgomery",
-   "party": "Democratic",
-   "phones": [
-    "(518) 455-3451"
-   ]
-  },
-  {
-   "name": "Jo Anne Simon",
-   "party": "Democratic",
-   "phones": [
-    "(518) 455-5426"
    ]
   },
   {
@@ -193,6 +215,20 @@ module.exports = {
    ]
   },
   {
+   "name": "Richard A. Brown",
+   "party": "Unknown",
+   "phones": [
+    "(718) 286-6000"
+   ]
+  },
+  {
+   "name": "Melinda Katz",
+   "party": "Unknown",
+   "phones": [
+    "(718) 286-3000"
+   ]
+  },
+  {
    "name": "Eric T. Schneiderman",
    "party": "Democratic",
    "phones": [
@@ -205,20 +241,6 @@ module.exports = {
    "phones": [
     "(518) 474-4044"
    ]
-  },
-  {
-   "name": "Kenneth P. Thompson",
-   "party": "Unknown",
-   "phones": [
-    "(718) 250-2000"
-   ]
-  },
-  {
-   "name": "Eric Adams",
-   "party": "Unknown",
-   "phones": [
-    "(718) 802-3700"
-   ]
   }
  ]
-} 
+}; 
