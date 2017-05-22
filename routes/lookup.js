@@ -2,9 +2,9 @@ var express = require('express');
 var router = express.Router();
 var googleCivics = require('../lib/clients/google-civics');
 
-function mergeResults(data) {
-  return data.offices.reduce(function(transformedOfficials, val) {
-    var _officials = val.officialIndices.map(i => data.officials[i]);
+function mergeReps({ offices, officials, divisions, normalizedInput }) {
+  let reps = offices.reduce(function(transformedOfficials, val) {
+    var _officials = val.officialIndices.map(i => officials[i]);
     _officials.forEach((o, i) => {
       o.divisionId = val.divisionId;
       o.office = val.name;
@@ -12,11 +12,22 @@ function mergeResults(data) {
     });
     return transformedOfficials.concat(_officials);
   }, []);
+  return { reps, divisions, normalizedInput };
 }
 
-function idResults(data) {
-  data.forEach((d, i) => d.id = i);
-  return data;
+function extractDistricts({ reps, divisions, normalizedInput }) {
+  let districts = reps.reduce(function(districts, rep) {
+    let district = []; // for flattening null results
+    let districtCode = rep.divisionId.split('/')[3];
+    if (districtCode) {
+      let districtId = districtCode.split(':')[1];
+      if (!isNaN(Number(districtId))) { // a real number
+        district = divisions[rep.divisionId].name;
+      }
+    }
+    return districts.concat(district);
+  }, []);
+  return { reps, districts, normalizedInput };
 }
 
 router.get('/', function(req, res) {
@@ -25,8 +36,8 @@ router.get('/', function(req, res) {
   if (queryParams.address) {
     googleCivics
       .getReps(queryParams.address)
-      .then(mergeResults)
-      .then(idResults)
+      .then(mergeReps)
+      .then(extractDistricts)
       .then(d => res.send(d))
       .catch(e => res.send(e));
   } else {
