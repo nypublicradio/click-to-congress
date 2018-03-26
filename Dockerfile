@@ -1,4 +1,4 @@
-FROM node:7.7-alpine
+FROM node:8.10-alpine
 RUN npm install -g mocha
 COPY . /code
 RUN chown -R node: /code
