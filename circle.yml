@@ -1,26 +1,92 @@
-machine:
-  services:
-    - docker
-  python:
-    version: 3.6.0
+version: 2
+jobs:
 
-dependencies:
-  cache_directories:
-    - "~/docker"
-  override:
-    - pip3 install -U git+https://github.com/nypublicradio/deploy.git
-    - ecs_deploy build
+  build:
+    working_directory: ~/click-to-congress
+    docker:
+      - image: circleci/node:8.10-stretch
+    steps:
+      - checkout
+      - restore_cache:
+          key: npm-{{ checksum "package.json" }}-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Requirements
+          command: |
+            if [[ ! -d ~/click-to-congress/node_modules ]]; then
+              npm install
+              npm install mocha
+            fi
+      - run:
+          name: Test
+          command: |
+            npm test
+      - save_cache:
+          key: npm-{{ checksum "package.json" }}-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/click-to-congress/node_modules
 
-test:
-  override:
-    - ecs_deploy test --test-cmd='npm test'
+  deploy:
+    working_directory: ~/click-to-congress
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          key: deploy-{{ checksum "circle.yml" }}
+      - run:
+          name: Install Requirements
+          command: |
+            if [[ ! -d ~/.venv ]]; then
+              python3 -m venv ~/.venv
+              source ~/.venv/bin/activate
+              pip3 install -U git+https://github.com/nypublicradio/nyprsetuptools.git
+            fi
+      - deploy:
+          command: |
+            source ~/.venv/bin/activate
+            if [[ "${CIRCLE_BRANCH}" == "demo" ]]; then
+              nyprsetuptools DockerDeploy --environment=demo \
+                                          --ecs-cluster=microservices \
+                                          --ecr-repository=click-to-congress \
+                                          --test='npm test' \
+                                          --tag=demo \
+                                          --wait=300
+            elif echo "$CIRCLE_TAG" | grep -q "v[0-9]\+\.[0-9]\+\.[0-9]\+"; then
+              nyprsetuptools DockerDeploy --environment=prod \
+                                          --ecs-cluster=microservices \
+                                          --ecr-repository=click-to-congress \
+                                          --test='npm test' \
+                                          --tag="$CIRCLE_TAG" \
+                                          --wait=300
+            fi
+      - save_cache:
+          key: deploy-{{ checksum "circle.yml" }}
+          paths:
+            - ~/.venv
+            - ~/click-to-congress/.eggs
 
-deployment:
-  prod:
-    tag: /v[0-9]+\.[0-9]+\.[0-9]+/
-    commands:
-      - ecs_deploy deploy --env=prod --memory-reservation=64 --port=3000
-  demo:
-    branch: master
-    commands:
-      - ecs_deploy deploy --env=demo --memory-reservation=64 --port=3000
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+/
+            branches:
+              only: demo
+
+experimental:
+  notify:
+    branches:
+      only:
+        - master
