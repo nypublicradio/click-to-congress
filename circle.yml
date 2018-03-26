@@ -45,7 +45,7 @@ jobs:
       - deploy:
           command: |
             source ~/.venv/bin/activate
-            if [[ "${CIRCLE_BRANCH}" == "demo" ]]; then
+            if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
               nyprsetuptools DockerDeploy --environment=demo \
                                           --ecs-cluster=microservices \
                                           --ecr-repository=click-to-congress \
