@@ -35,7 +35,7 @@ function extractDistricts({ reps, divisions, normalizedInput }) {
 function checkResponse(body) {
   let { error } = body;
   if (error) {
-    throw { error: error.errors, code: 400, message: error.message };
+    throw { error: { code: 400, message: error.message }};
   } else {
     return body;
   }
@@ -53,7 +53,7 @@ router.get('/', function(req, res) {
       .then(d => res.send(d))
       .catch(e => {
         console.error(e);
-        res.status(500 || e.code).send(e);
+        res.status(e.error.code || 500).send(e);
       });
   } else {
     res.status(400).send({
