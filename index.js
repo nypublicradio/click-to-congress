@@ -26,5 +26,5 @@ app.use(apiPrefix, apiRouter);
 
 var server = app.listen(3000, function() {
   var port = server.address().port;
-  console.log('Listening at port %s', port);  
+  console.log('Listening at port %s', port);
 });
