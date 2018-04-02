@@ -51,7 +51,10 @@ router.get('/', function(req, res) {
       .then(mergeReps)
       .then(extractDistricts)
       .then(d => res.send(d))
-      .catch(e => res.send(e));
+      .catch(e => {
+        console.error(e);
+        res.status(500 || e.code).send(e);
+      });
   } else {
     res.status(400).send({
       error: {
