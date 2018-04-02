@@ -32,12 +32,22 @@ function extractDistricts({ reps, divisions, normalizedInput }) {
   return { reps, districts, normalizedInput };
 }
 
+function checkResponse(body) {
+  let { error } = body;
+  if (error) {
+    throw { error: error.errors, code: 400, message: error.message };
+  } else {
+    return body;
+  }
+}
+
 router.get('/', function(req, res) {
   var results;
   var queryParams = req.query;
   if (queryParams.address) {
     googleCivics
       .getReps(queryParams.address)
+      .then(checkResponse)
       .then(mergeReps)
       .then(extractDistricts)
       .then(d => res.send(d))
