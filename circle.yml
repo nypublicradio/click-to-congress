@@ -65,7 +65,7 @@ jobs:
                 --memory-reservation=512 \
                 --ports=3000 \
                 --task-role=click-to-congress-$ENV \
-                --tag="$CIRCLE_TAG" \
+                --tag="$TAG" \
                 --test='npm test' \
                 --wait=300
       - save_cache:
