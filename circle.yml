@@ -1,3 +1,4 @@
+---
 version: 2
 jobs:
 
@@ -46,20 +47,27 @@ jobs:
           command: |
             source ~/.venv/bin/activate
             if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
-              nyprsetuptools DockerDeploy --environment=demo \
-                                          --ecs-cluster=microservices \
-                                          --ecr-repository=click-to-congress \
-                                          --test='npm test' \
-                                          --tag=demo \
-                                          --wait=300
+              ENV="demo"
+              TAG="demo"
             elif echo "$CIRCLE_TAG" | grep -q "v[0-9]\+\.[0-9]\+\.[0-9]\+"; then
-              nyprsetuptools DockerDeploy --environment=prod \
-                                          --ecs-cluster=microservices \
-                                          --ecr-repository=click-to-congress \
-                                          --test='npm test' \
-                                          --tag="$CIRCLE_TAG" \
-                                          --wait=300
+              ENV="prod"
+              TAG="$CIRCLE_TAG"
+            else
+              exit 1
             fi
+              nyprsetuptools DockerDeploy \
+                --cpu=256 \
+                --ecr-repository=click-to-congress \
+                --ecs-cluster=microservices \
+                --environment=$ENV \
+                --execution-role="ecsTaskExecutionRole" \
+                --fargate \
+                --memory-reservation=512 \
+                --ports=3000 \
+                --task-role=click-to-congress-$ENV \
+                --tag="$CIRCLE_TAG" \
+                --test='npm test' \
+                --wait=300
       - save_cache:
           key: deploy-{{ checksum "circle.yml" }}
           paths:
